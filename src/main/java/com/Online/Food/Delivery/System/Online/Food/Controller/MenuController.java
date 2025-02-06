@@ -1,7 +1,7 @@
 //package com.Online.Food.Delivery.System.Online.Food.Controller;
 //
 //import com.Online.Food.Delivery.System.Online.Food.DTO.MenuDTO;
-//import com.Online.Food.Delivery.System.Online.Food.Services.MenuServices;
+//import com.Online.Food.Delivery.System.Online.Food.Services.MenuServicesImpl;
 //import lombok.RequiredArgsConstructor;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@
 //public class MenuController {
 //
 //    private static final Logger log = LoggerFactory.getLogger(MenuController.class);
-//    private final MenuServices menuServices;
+//    private final MenuServicesImpl menuServices;
 //
 //    @PostMapping("/add")
 //    public ResponseEntity<?> createMenu(@RequestBody MenuDTO menuDTO) {
