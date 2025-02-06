@@ -1,6 +1,7 @@
 package com.Online.Food.Delivery.System.Online.Food.Controller;
 
 import com.Online.Food.Delivery.System.Online.Food.Services.DeliveryServices;
+import com.Online.Food.Delivery.System.Online.Food.Services.MenuServices;
 import com.Online.Food.Delivery.System.Online.Food.Services.RestaurantServices;
 import com.Online.Food.Delivery.System.Online.Food.Services.RestaurantServicesImpl;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
     private final RestaurantServices restaurantServices;
     private final DeliveryServices deliveryServices;
+    private final MenuServices menuServices;
     @GetMapping("/orderDelivered/{orderId}/{otp}")
     public ResponseEntity<?> orderAccept(@PathVariable Long orderId, @PathVariable Integer otp) {
         ResponseEntity<?> orderReady = restaurantServices.OrderDelivered(orderId,otp);
@@ -25,5 +27,10 @@ public class CustomerController {
     public ResponseEntity<?> checkStatus(@PathVariable Long deliveryId) {
         ResponseEntity<?> deliveryById = deliveryServices.getDeliveryById(deliveryId);
         return ResponseEntity.ok(deliveryById);
+    }
+    @GetMapping("/getMenuByRestaurantId/{restaurantId}")
+    public ResponseEntity<?> getMenuByRestaurantId(@PathVariable Long restaurantId) {
+        ResponseEntity<?> menuByRestaurantId = menuServices.getMenuByRestaurantId(restaurantId);
+        return ResponseEntity.ok(menuByRestaurantId);
     }
 }
