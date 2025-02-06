@@ -1,14 +1,12 @@
 package com.Online.Food.Delivery.System.Online.Food.Controller;
 
 import com.Online.Food.Delivery.System.Online.Food.DTO.DeliveryPersonDTO;
-import com.Online.Food.Delivery.System.Online.Food.Entity.Delivery;
 import com.Online.Food.Delivery.System.Online.Food.Services.DeliveryPersonServices;
 import com.Online.Food.Delivery.System.Online.Food.Services.DeliveryServices;
+import com.Online.Food.Delivery.System.Online.Food.Services.DeliveryServicesImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/delivery-person")
