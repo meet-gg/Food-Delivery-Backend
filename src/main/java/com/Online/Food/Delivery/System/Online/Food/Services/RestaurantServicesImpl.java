@@ -1,7 +1,6 @@
 package com.Online.Food.Delivery.System.Online.Food.Services;
 
 import com.Online.Food.Delivery.System.Online.Food.DTO.*;
-import com.Online.Food.Delivery.System.Online.Food.DTO.Enums.DStatus;
 import com.Online.Food.Delivery.System.Online.Food.Entity.*;
 import com.Online.Food.Delivery.System.Online.Food.Exceptions.ResourceNotFoundException;
 import com.Online.Food.Delivery.System.Online.Food.Repository.*;
@@ -17,17 +16,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.random.RandomGenerator;
-import java.util.stream.Stream;
 
 import static com.Online.Food.Delivery.System.Online.Food.DTO.Enums.DStatus.DELIVERED;
 import static com.Online.Food.Delivery.System.Online.Food.DTO.Enums.DStatus.OUT_OF_DELIVERY;
 
 @Service
 @RequiredArgsConstructor
-public class RestaurantServices {
+public class RestaurantServicesImpl implements RestaurantServices {
 
-    private static final Logger log = LoggerFactory.getLogger(RestaurantServices.class);
+    private static final Logger log = LoggerFactory.getLogger(RestaurantServicesImpl.class);
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
     private final ModelMapper modelMapper;
@@ -38,6 +35,7 @@ public class RestaurantServices {
     @Getter
     private static Integer OTP;
 
+    @Override
     public ResponseEntity<?> addRestaurant(RestaurantDTO restaurantDTO) {
         try {
             Restaurant restaurant=modelMapper.map(restaurantDTO, Restaurant.class);
@@ -48,6 +46,7 @@ public class RestaurantServices {
         }
     }
 
+    @Override
     public ResponseEntity<?> assignFoodToRestaurant(Long id,MenuDTO menuDTO) {
         Restaurant restaurant=restaurantRepository.findById(id).orElseThrow(()->
                 new ResourceNotFoundException("Restaurant not found"));
@@ -60,6 +59,7 @@ public class RestaurantServices {
         return new ResponseEntity<>(modelMapper.map(restaurant,RestaurantDTO.class), HttpStatus.OK);
     }
 
+    @Override
     public ResponseEntity<?> getOrdersByRestaurantId(Long restaurantId) {
         List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
         List<RestaurantResponseDTO> RestaurantResponse = orders.stream().map(order -> modelMapper.map(order, RestaurantResponseDTO.class)).toList();
@@ -86,6 +86,7 @@ public class RestaurantServices {
         return new ResponseEntity<>(RestaurantResponse, HttpStatus.OK);
     }
 
+    @Override
     public ResponseEntity<?> orderReady(Long orderId){
         Random random=new Random();
         OTP=random.nextInt(10000);
@@ -96,6 +97,7 @@ public class RestaurantServices {
         return new ResponseEntity<>("Order Out Of Delivery (Status updated)",HttpStatus.OK);
     }
 
+    @Override
     public ResponseEntity<?> OrderDelivered(Long orderId,Integer otp){
         if (Objects.equals(otp, OTP)){
             DeliveryStatus delivery = deliveryStatusRepository.findByOrderId(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
