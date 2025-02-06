@@ -6,9 +6,9 @@ import com.Online.Food.Delivery.System.Online.Food.DTO.SignUpDTO;
 import com.Online.Food.Delivery.System.Online.Food.DTO.UserDTO;
 import com.Online.Food.Delivery.System.Online.Food.Repository.UserRepository;
 import com.Online.Food.Delivery.System.Online.Food.Services.AuthServices;
-import com.Online.Food.Delivery.System.Online.Food.Services.AuthServicesimpl;
-import com.Online.Food.Delivery.System.Online.Food.Services.JwtServices;
+import com.Online.Food.Delivery.System.Online.Food.Services.JwtServicesImpl;
 import com.Online.Food.Delivery.System.Online.Food.Services.UserServices;
+import com.Online.Food.Delivery.System.Online.Food.Services.UserServicesImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +31,7 @@ public class AuthController {
     private final UserServices userServices;
     private final AuthServices authServices;
 //    private final SessionRepo sessionRepo;
-    private final JwtServices jwtServices;
+    private final JwtServicesImpl jwtServicesImpl;
     private final UserRepository userRepo;
 
     @PostMapping("/signup")
