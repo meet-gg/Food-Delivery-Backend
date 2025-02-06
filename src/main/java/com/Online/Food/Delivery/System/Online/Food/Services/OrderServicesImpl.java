@@ -1,8 +1,6 @@
 package com.Online.Food.Delivery.System.Online.Food.Services;
 
-import com.Online.Food.Delivery.System.Online.Food.DTO.Enums.DStatus;
 import com.Online.Food.Delivery.System.Online.Food.DTO.MenuDTO;
-import com.Online.Food.Delivery.System.Online.Food.DTO.OrderDTO;
 import com.Online.Food.Delivery.System.Online.Food.DTO.OrderItemDTO;
 import com.Online.Food.Delivery.System.Online.Food.DTO.OrderItemsDTO;
 import com.Online.Food.Delivery.System.Online.Food.Entity.*;
@@ -18,18 +16,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.Online.Food.Delivery.System.Online.Food.DTO.Enums.DStatus.*;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServices {
+public class OrderServicesImpl implements OrderServices {
 
-    private static final Logger log = LoggerFactory.getLogger(OrderServices.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderServicesImpl.class);
     private final OrderRepository orderRepository;
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
@@ -40,6 +35,7 @@ public class OrderServices {
     private final DeliveryRepository deliveryRepository;
 //    private final Map<Long,List<Menu>> map=new HashMap<>();
 
+    @Override
     public ResponseEntity<?> placeOrder(Long restaurantId, List<OrderItemDTO> orderItemDTO) {
         try {
             Order order=new Order();
@@ -73,6 +69,7 @@ public class OrderServices {
         }
     }
 
+    @Override
     public ResponseEntity<?> getAllOrder() {
             List<Order> orders = orderRepository.findAll();
         List<List<Menu>> list = orders.stream().map(order -> orderItemRepository.findByOrder(order).stream().map(orderItem -> orderItem.getMenu()).toList()).toList();
@@ -97,6 +94,7 @@ public class OrderServices {
         return new ResponseEntity<>(orderItemsDTOS, HttpStatus.OK);
     }
 
+    @Override
     public ResponseEntity<OrderItemsDTO> getOrderById(Long id) {
 //
 //        List<Menu> orders = map.get(id);
@@ -130,6 +128,7 @@ public class OrderServices {
         return new ResponseEntity<>(orderItemsDTO, HttpStatus.OK);
     }
 
+    @Override
     public ResponseEntity<?> OrderByUser(){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Order> orderByUser = orderRepository.findByUser(user);
