@@ -12,14 +12,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Service
-public class JwtServices {
+public class JwtServicesImpl implements JwtServices {
     @Value("${spring.secret.Key}")
     private String secretKey;
 
-    private SecretKey getSecretKey() {
+    @Override
+    public SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
-
+    @Override
     public String generateAccessToken(User user) {
        return Jwts.builder()
                 .subject(user.getId().toString())
@@ -30,6 +31,7 @@ public class JwtServices {
                 .signWith(getSecretKey())
                 .compact();
     }
+    @Override
     public String generateRefreshToken(User user) {
         return Jwts.builder()
                 .subject(user.getId().toString())
@@ -38,6 +40,7 @@ public class JwtServices {
                 .signWith(getSecretKey())
                 .compact();
     }
+    @Override
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
