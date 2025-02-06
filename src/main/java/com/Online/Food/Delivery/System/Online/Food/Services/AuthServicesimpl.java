@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServicesimpl implements AuthServices {
     private final AuthenticationManager authenticationManager;
-    private final JwtServices jwtServices;
+    private final JwtServicesImpl jwtServicesImpl;
     private final UserRepository userRepo;
 //    private final SessionServices sessionServices;
     @Override
@@ -24,8 +24,8 @@ public class AuthServicesimpl implements AuthServices {
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
         );
         User user = (User) authenticate.getPrincipal();
-        String accessToken = jwtServices.generateAccessToken(user);
-        String refreshToken = jwtServices.generateRefreshToken(user);
+        String accessToken = jwtServicesImpl.generateAccessToken(user);
+        String refreshToken = jwtServicesImpl.generateRefreshToken(user);
 //        sessionServices.generateNewSession(user, refreshToken);
 
         return new LoginResponseDTO(user.getId(), accessToken, refreshToken);
@@ -33,10 +33,10 @@ public class AuthServicesimpl implements AuthServices {
     @Override
     public LoginResponseDTO refreshToken(String refreshToken) {
 //        sessionServices.validateSession(refreshToken);
-        Long userId=jwtServices.getUserIdFromToken(refreshToken);
+        Long userId= jwtServicesImpl.getUserIdFromToken(refreshToken);
         User user=userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User Not Found"));
 
-        String accessToken = jwtServices.generateAccessToken(user);
+        String accessToken = jwtServicesImpl.generateAccessToken(user);
         return new LoginResponseDTO(user.getId(), accessToken, refreshToken);
     }
 
