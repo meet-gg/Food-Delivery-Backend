@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServices implements UserDetailsService {
+public class UserServicesImpl implements UserDetailsService,UserServices {
     private final UserRepository userRepo;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
@@ -27,6 +27,7 @@ public class UserServices implements UserDetailsService {
         return userRepo.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("user not found with mail "+username));
     }
 
+    @Override
     public UserDTO signup(SignUpDTO signUpDTO) {
         Optional<User> user=userRepo.findByEmail(signUpDTO.getEmail());
         if(user.isPresent()) {
