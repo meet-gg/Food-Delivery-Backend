@@ -5,4 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface MenuServices {
      ResponseEntity<?> createMenu(MenuDTO menuDTO);
+
+    ResponseEntity<?> getMenuByRestaurantId(Long restaurantId);
 }

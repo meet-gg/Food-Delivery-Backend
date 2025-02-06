@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MenuServicesImpl implements MenuServices {
@@ -32,4 +34,16 @@ public class MenuServicesImpl implements MenuServices {
         }
     }
 
+    @Override
+    public ResponseEntity<?> getMenuByRestaurantId(Long restaurantId) {
+        try {
+            List<Menu> menus = menuRepository.findByRestaurantId(restaurantId);
+            if (menus.isEmpty()) {
+                return new ResponseEntity<>("Menu not found with Given Restaurant Id : " + restaurantId, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(menus, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
