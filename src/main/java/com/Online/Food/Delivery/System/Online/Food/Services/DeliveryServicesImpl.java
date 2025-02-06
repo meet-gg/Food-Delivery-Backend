@@ -28,15 +28,16 @@ import static com.Online.Food.Delivery.System.Online.Food.DTO.Enums.DStatus.*;
 
 @Service
 @RequiredArgsConstructor
-public class DeliveryServices {
-    private static final Logger log = LoggerFactory.getLogger(DeliveryServices.class);
+public class DeliveryServicesImpl implements DeliveryServices{
+    private static final Logger log = LoggerFactory.getLogger(DeliveryServicesImpl.class);
     private final DeliveryRepository deliveryRepository;
     private final OrderRepository orderRepository;
-    private final OrderServices orderServices;
+    private final OrderServicesImpl orderServicesImpl;
     private final ModelMapper modelMapper;
     private final DeliveryPersonRepository deliveryPersonRepository;
     private final DeliveryStatusRepository deliveryStatusRepository;
 
+    @Override
     public ResponseEntity<?> getAllOrder(){
         List<Delivery> orders = deliveryRepository.findAll();
         List<DeliveryResponseDTO> orderss = orders.stream().map(delivery -> modelMapper.map(delivery, DeliveryResponseDTO.class)).toList();
@@ -44,6 +45,7 @@ public class DeliveryServices {
         return new ResponseEntity<>(orderss, HttpStatus.OK);
     }
 
+    @Override
     public void removeDeliverOrder(Long orderId){
         try {
             Delivery delivery = deliveryRepository.findByOrderId(orderId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
@@ -56,6 +58,7 @@ public class DeliveryServices {
     }
 
     // user check the delivery status with hel of delivery id
+    @Override
     public ResponseEntity<?> getDeliveryById(Long orderId){
         DeliveryStatus delivery = deliveryStatusRepository.findByOrderId(orderId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
         DeliveryStatusDTO checkStatus = modelMapper.map(delivery, DeliveryStatusDTO.class);
@@ -68,7 +71,7 @@ public class DeliveryServices {
     }
 
     // if user is delivery boy so update status
-
+    @Override
     public ResponseEntity<?> assignDelivery(Long deliveryId){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Delivery delivery=deliveryRepository.findById(deliveryId).orElseThrow(()-> new ResourceNotFoundException("Delivery not found"));
