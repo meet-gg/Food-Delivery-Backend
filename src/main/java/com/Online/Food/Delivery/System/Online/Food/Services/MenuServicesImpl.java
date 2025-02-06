@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MenuServices {
+public class MenuServicesImpl implements MenuServices {
 
-    private static final Logger log = LoggerFactory.getLogger(MenuServices.class);
+    private static final Logger log = LoggerFactory.getLogger(MenuServicesImpl.class);
     private final MenuRepository menuRepository;
     private final ModelMapper modelMapper;
 
+    @Override
     public ResponseEntity<?> createMenu(MenuDTO menuDTO) {
         try {
             log.info("menu dto {}", menuDTO);
