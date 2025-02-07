@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: Online Food Delivery
+  datasource:
+    url: jdbc:mysql://localhost:3306/food?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: M@@t5450
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+#Secret Key for jwtService
+  secret:
+    Key: dfssdf34534jh9hg4iu0u324b1ug44gh4re9rg43yug2uehf4eyg4u5fg4gruyg4uyghrr34
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: meetgoyani949@gmail.com
+    password: sdka ctgu dlkd yxxk
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
