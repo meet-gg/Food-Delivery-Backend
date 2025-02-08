@@ -29,10 +29,12 @@ public class WebSecurity {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-                        .requestMatchers("delivery/**","/auth/**","/home.html","/posts/**","/menu/**","restaurant/**","/delivery/**").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/customer/**").hasAnyRole(USER.name())
-                        .requestMatchers("/delivery-person/**").hasAnyRole(DELIVERY_BOY.name())
+                        .requestMatchers("/delivery-person/**").hasAnyRole(DELIVERY.name())
                         .requestMatchers("/restaurant/**").hasAnyRole(RESTAURANT.name())
                         .requestMatchers("/order/**").hasAnyRole(USER.name())
 //                        .requestMatchers("").hasAnyRole(ADMIN.name())
@@ -43,7 +45,6 @@ public class WebSecurity {
 //                        .requestMatchers(HttpMethod.GET,"/posts/**").hasAnyAuthority(POST_VIEW.name())
                         //this how set the authority
                          .anyRequest().authenticated())
-                .csrf(csrf->csrf.disable())
                 .sessionManagement(sessionConfig->sessionConfig
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -52,7 +53,16 @@ public class WebSecurity {
 //                        .successHandler(successHandler));
         return http.build();
     }
-//    @Bean
+
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
+
+    //    @Bean
 //    UserDetailsService inMemoryUserDetailsService() {
 //        UserDetails us1= User
 //                .withUsername("mm")
