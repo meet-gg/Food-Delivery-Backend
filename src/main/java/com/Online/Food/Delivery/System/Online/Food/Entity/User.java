@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private Restaurant restaurant;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
 
