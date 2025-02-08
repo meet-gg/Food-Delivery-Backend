@@ -76,7 +76,7 @@ public class DeliveryServicesImpl implements DeliveryServices{
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Delivery delivery=deliveryRepository.findById(deliveryId).orElseThrow(()-> new ResourceNotFoundException("Delivery not found"));
         delivery.setDeliveryStatus(ASSIGNED);
-        delivery.setDeliveryPerson(deliveryPersonRepository.findByEmail(user.getEmail()));
+        delivery.setDeliveryPerson(deliveryPersonRepository.findByEmail(user.getEmail()).get());
         deliveryRepository.save(delivery);
         DeliveryStatus deliveryStatus=deliveryStatusRepository.findById(deliveryId).orElseThrow(()-> new ResourceNotFoundException("Delivery id not found"));
         deliveryStatus.setDeliveryStatus(ASSIGNED);
