@@ -32,4 +32,10 @@ public class CustomerController {
         ResponseEntity<?> menuByRestaurantId = menuServices.getMenuByRestaurantId(restaurantId);
         return ResponseEntity.ok(menuByRestaurantId);
     }
+
+    @GetMapping("/getAllRestaurant")
+    public ResponseEntity<?> getAllRestaurant() {
+        ResponseEntity<?> allRestaurants = restaurantServices.getAllRestaurants();
+        return ResponseEntity.ok(allRestaurants);
+    }
 }

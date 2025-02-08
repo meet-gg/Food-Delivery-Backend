@@ -10,5 +10,5 @@ public interface RestaurantServices {
      ResponseEntity<?> getOrdersByRestaurantId(Long restaurantId);
      ResponseEntity<?> orderReady(Long orderId);
      ResponseEntity<?> OrderDelivered(Long orderId,Integer otp);
-
+     ResponseEntity<?> getAllRestaurants();
 }

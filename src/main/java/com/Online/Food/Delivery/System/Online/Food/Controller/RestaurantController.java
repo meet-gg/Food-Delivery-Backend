@@ -3,6 +3,7 @@ package com.Online.Food.Delivery.System.Online.Food.Controller;
 import com.Online.Food.Delivery.System.Online.Food.DTO.MenuDTO;
 import com.Online.Food.Delivery.System.Online.Food.DTO.RestaurantDTO;
 import com.Online.Food.Delivery.System.Online.Food.Services.DeliveryServices;
+import com.Online.Food.Delivery.System.Online.Food.Services.MenuServices;
 import com.Online.Food.Delivery.System.Online.Food.Services.RestaurantServices;
 import com.Online.Food.Delivery.System.Online.Food.Services.RestaurantServicesImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class RestaurantController {
     private final RestaurantServices restaurantServices;
     private final DeliveryServices deliveryServices;
+    private final MenuServices menuServices;
 
     @PostMapping("/addRest")
     @Operation(summary = "add Restaurant")  // for use of Swagger ui
@@ -38,7 +40,6 @@ public class RestaurantController {
         return ResponseEntity.ok(orders);
     }
 
-
     @GetMapping("/orderOutOfDelivery/{orderId}")
     @PreAuthorize("@restaurantSecurity.isUserOrderExist(#orderId)")
     public ResponseEntity<?> orderOutOfDelivery(@PathVariable Long orderId) {
@@ -51,5 +52,11 @@ public class RestaurantController {
     public ResponseEntity<?> checkStatus(@PathVariable Long orderId) {
         ResponseEntity<?> deliveryById = deliveryServices.getDeliveryById(orderId);
         return ResponseEntity.ok(deliveryById);
+    }
+
+    @GetMapping("/getMenuByRestaurantId/{restaurantId}")
+    public ResponseEntity<?> getMenuByRestaurantId(@PathVariable Long restaurantId) {
+        ResponseEntity<?> menuByRestaurantId = menuServices.getMenuByRestaurantId(restaurantId);
+        return ResponseEntity.ok(menuByRestaurantId);
     }
 }
