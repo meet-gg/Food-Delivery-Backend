@@ -7,6 +7,7 @@ import com.Online.Food.Delivery.System.Online.Food.Exceptions.ResourceNotFoundEx
 import com.Online.Food.Delivery.System.Online.Food.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.mail.MailSender;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +23,7 @@ public class UserServicesImpl implements UserDetailsService,UserServices {
     private final UserRepository userRepo;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final MailServices mailServices;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("user not found with mail "+username));
@@ -35,8 +37,8 @@ public class UserServicesImpl implements UserDetailsService,UserServices {
         }
         User createUser=modelMapper.map(signUpDTO, User.class);
         createUser.setPassword(passwordEncoder.encode(createUser.getPassword()));
-
         User saveUser = userRepo.save(createUser);
+        mailServices.sendMail(signUpDTO.getEmail(),"Zomato Welcome","welcome to Zomato Clone");
         return modelMapper.map(saveUser, UserDTO.class);
     }
 }
