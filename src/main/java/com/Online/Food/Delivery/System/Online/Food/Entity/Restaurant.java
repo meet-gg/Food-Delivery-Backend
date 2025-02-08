@@ -24,6 +24,11 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menus;
 
+    @JsonIgnore
+    @OneToOne
+    private User user;
+
+
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Order> orders;
 }
