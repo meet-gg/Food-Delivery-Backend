@@ -32,6 +32,7 @@ public class RestaurantServicesImpl implements RestaurantServices {
     private final DeliveryRepository deliveryRepository;
     private final DeliveryStatusRepository deliveryStatusRepository;
     private final OrderItemRepository orderItemRepository;
+    private final MailServices mailServices;
     @Getter
     private static Integer OTP;
 
@@ -74,7 +75,7 @@ public class RestaurantServicesImpl implements RestaurantServices {
 //
 //            });
             for (OrderItemDTO orderItem:orderItems){
-                OrderItem byOrderIdAndMenuId = orderItemRepository.findByOrderIdAndMenuId(restaurantResponseDTO.getId(), orderItem.getMenu().getId());
+                OrderItem byOrderIdAndMenuId = orderItemRepository.findByOrderIdAndMenuId(restaurantResponseDTO.getId(), orderItem.getMenuId());
                 //change
                 price+=byOrderIdAndMenuId.getTotalPrice();
                 quantity+=byOrderIdAndMenuId.getQuantity();
@@ -93,6 +94,8 @@ public class RestaurantServicesImpl implements RestaurantServices {
         log.info("OTP is {}",OTP);
         DeliveryStatus delivery = deliveryStatusRepository.findByOrderId(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         delivery.setDeliveryStatus(OUT_OF_DELIVERY);
+        Order order = orderRepository.findById(orderId).get();
+        mailServices.sendMail(order.getUser().getEmail(),"Verification Code","OTP is : "+OTP);
         deliveryStatusRepository.save(delivery);
         return new ResponseEntity<>("Order Out Of Delivery (Status updated)",HttpStatus.OK);
     }
@@ -106,5 +109,16 @@ public class RestaurantServicesImpl implements RestaurantServices {
             return new ResponseEntity<>("Order Accepted",HttpStatus.OK);
         }
         return new ResponseEntity<>("Enter Valid OTP",HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllRestaurants() {
+        try {
+            List<Restaurant> restaurants = restaurantRepository.findAll();
+            List<RestaurantDTO> restaurantDTOList = restaurants.stream().map(restaurant -> modelMapper.map(restaurant, RestaurantDTO.class)).toList();
+            return new ResponseEntity<>(restaurantDTOList, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
