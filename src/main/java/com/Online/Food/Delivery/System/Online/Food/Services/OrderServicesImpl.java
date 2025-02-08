@@ -46,7 +46,7 @@ public class OrderServicesImpl implements OrderServices {
             order.setRestaurant(restaurant);
 
             for (OrderItemDTO orderMenu:orderItemDTO){
-                Menu menu=menuRepository.findById(orderMenu.getMenu().getId()).orElseThrow(() -> new ResourceNotFoundException("Menu Not Found"));
+                Menu menu=menuRepository.findById(orderMenu.getMenuId()).orElseThrow(() -> new ResourceNotFoundException("Menu Not Found"));
 //change
                 OrderItem orderItem=new OrderItem(menu,orderMenu.getQuantity());
                 order.addOrderItem(orderItem);
