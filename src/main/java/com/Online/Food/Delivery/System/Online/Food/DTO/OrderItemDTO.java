@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItemDTO {
-    private Menu menu;
+    private Long menuId;
     private Integer quantity;
 }
