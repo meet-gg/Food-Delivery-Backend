@@ -6,6 +6,7 @@ import com.Online.Food.Delivery.System.Online.Food.Entity.User;
 import com.Online.Food.Delivery.System.Online.Food.Exceptions.ResourceNotFoundException;
 import com.Online.Food.Delivery.System.Online.Food.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ public class AuthServicesimpl implements AuthServices {
     private final MailServices mailServices;
 //    private final SessionServices sessionServices;
     @Override
+    @CachePut(cacheNames = "Customer-login",key = "#result.userId")
     public LoginResponseDTO login(LoginDTO loginDTO) {
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
