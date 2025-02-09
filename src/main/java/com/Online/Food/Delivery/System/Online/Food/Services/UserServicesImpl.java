@@ -7,6 +7,7 @@ import com.Online.Food.Delivery.System.Online.Food.Exceptions.ResourceNotFoundEx
 import com.Online.Food.Delivery.System.Online.Food.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.mail.MailSender;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,12 +25,14 @@ public class UserServicesImpl implements UserDetailsService,UserServices {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final MailServices mailServices;
+    private final String CACHE_NAME="Customer";
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("user not found with mail "+username));
     }
 
     @Override
+    @CachePut(cacheNames = CACHE_NAME,key = "#result.id")
     public UserDTO signup(SignUpDTO signUpDTO) {
         Optional<User> user=userRepo.findByEmail(signUpDTO.getEmail());
         if(user.isPresent()) {
