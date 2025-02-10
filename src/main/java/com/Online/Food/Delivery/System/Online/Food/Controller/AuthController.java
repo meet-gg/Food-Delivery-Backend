@@ -60,8 +60,8 @@ public class AuthController {
         return ResponseEntity.ok(loginResponseDTO) ;
     }
 
-//    @PostMapping("/logout")
-//    public String logout(HttpServletRequest request, HttpServletResponse response){
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response){
 //        String refreshToken = Arrays.stream(request.getCookies())
 //                .filter(cookie -> cookie.getName().equals("refreshToken"))
 //                .findFirst()
@@ -71,12 +71,13 @@ public class AuthController {
 //        Long id=session.getUser().getId();
 //        String accessToken= jwtServices.generateAccessToken(userRepo.findById(id).get());
 //        sessionRepo.delete(session);
-//        Cookie cookie = new Cookie("refreshToken", "hello");
-//        cookie.setHttpOnly(true);
-//        cookie.setSecure(false); // Set to true in production with HTTPS
-//        response.addCookie(cookie);
 
-//        return "loout";
-//    }
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // Set to true in production with HTTPS
+        response.addCookie(cookie);
+//
+        return "log-out";
+    }
 
 }
